@@ -95,26 +95,36 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
 //add your solution here!
-	if(r == board.size() || c == board.size()){
-        if(dict.find(word)==dict.end()) return false;
-        else{
-            result.insert(word);
-            return true;
-        }
-    }
-    if(dict.find(word) != dict.end()){
-        if(prefix.find(word)!=dict.end()){
-            //if the prefix cannot form another word: add the result
-            if(!boggleHelper(dict, prefix, board, word + board[r][c], result, r + dr, c + dc,dr, dc)){
-                result.insert(word);
-                return true;
-            }
-        }
-        else{
-            result.insert(word);
-            return true;
-        }
-    }
-    return boggleHelper(dict, prefix, board, word + board[r][c], result, r + dr, c + dc,dr, dc);
 
+	//base case: when it reaches the end row or column of board 
+	if(r == board.size() || c == board.size())
+	{
+			if(dict.find(word)==dict.end()) 
+			{
+				return false; //the word is not in the dict 
+			}
+			else
+			{
+				result.insert(word); 
+				return true;
+			}
+	}
+	if(dict.find(word) != dict.end()) 
+	{
+			if(prefix.find(word)!=dict.end()) //case: when the word is also the prefix 
+			{
+				//if this prefix cannot form the word, insert the word to the result 
+				if(!boggleHelper(dict, prefix, board, word + board[r][c], result, r + dr, c + dc,dr, dc))
+				{
+					result.insert(word);
+					return true;
+				}
+			}
+			else //case: when the word is not the prefix, then it's definitely the longest word, insert directly 
+			{
+				result.insert(word);
+				return true;
+			}
+	}
+	return boggleHelper(dict, prefix, board, word + board[r][c], result, r + dr, c + dc,dr, dc);
 }
